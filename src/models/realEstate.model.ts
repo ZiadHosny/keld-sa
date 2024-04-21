@@ -12,8 +12,9 @@ const RealEstateSchema = new Schema<RealEstate>({
         type: String,
         required: true,
     }, referenceNumber: {
-        type: String,
+        type: Number,
         required: true,
+        unique: true,
     }, dateOfBirth: {
         type: String,
         required: true,
@@ -27,15 +28,14 @@ const RealEstateSchema = new Schema<RealEstate>({
         type: Number,
         required: true,
     }, price: {
-        type: String,
+        type: Number,
         required: true,
     }, area: {
-        type: String,
+        type: Number,
         required: true,
     }
 }, {
     timestamps: true
 })
 
-
-export const RealEstateModal = model('message', RealEstateSchema)
+export const RealEstateModel = model('realEstate', RealEstateSchema)

@@ -20,6 +20,5 @@ const devMode = (err: any, res: Response) => {
     res.status(statusCode).json({
         message: err.message,
         status: statusCode,
-        // stack: err.stack
     })
 }
