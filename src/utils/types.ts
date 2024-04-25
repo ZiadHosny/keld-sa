@@ -10,3 +10,11 @@ export type RealEstate = {
     price: number,
     area: number
 }
+
+export type WhatsAppMessage = {
+    sender: string,
+    receiver: string,
+    message: string,
+    replay: string,
+    deviceType: string,
+}
