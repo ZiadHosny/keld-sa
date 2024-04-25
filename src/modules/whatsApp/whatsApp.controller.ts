@@ -1,13 +1,12 @@
 import { Request, Response } from "express"
 import { catchAsyncError } from "../../utils/AppError.js"
-import { startClient } from "../../utils/whatsapp.js";
 // @ts-ignore
 import { NlpManager } from 'node-nlp'
 
 
 export const connectToWhatsApp = catchAsyncError(async (req: Request, res: Response) => {
 
-    startClient('ziad')
+    // startClient('ziad')
 
     res.json({ message: 'Connect to Whatsapp Successfully' });
 })

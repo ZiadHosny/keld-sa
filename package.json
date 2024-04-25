@@ -8,15 +8,16 @@
   "type": "module",
   "scripts": {
     "start": "ts-node --esm dist/index.js",
-    "dev": "nodemon --esm src/index.ts",
+    "server": "nodemon --esm src/index.ts",
+    "dev": "npm run server",
     "ts.check": "tsc --project tsconfig.json",
-    "add-build": "git add dist",
+    "add-dist": "git add dist",
     "build": "rimraf dist && tsc"
   },
   "pre-commit": [
     "ts.check",
     "build",
-    "add-build"
+    "add-dist"
   ],
   "dependencies": {
     "cors": "^2.8.5",
@@ -27,6 +28,7 @@
     "morgan": "^1.10.0",
     "node-nlp": "^4.27.0",
     "qrcode-terminal": "^0.12.0",
+    "socket.io": "^4.7.5",
     "whatsapp-web.js": "^1.23.0",
     "wwebjs-mongo": "^1.1.0",
     "xlsx": "^0.18.5"
@@ -38,6 +40,7 @@
     "@types/qrcode-terminal": "^0.12.2",
     "chalk": "^5.3.0",
     "nodemon": "^3.1.0",
+    "pre-commit": "^1.2.2",
     "rimraf": "^5.0.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.4.5"
