@@ -1,7 +1,7 @@
 import pkg from "whatsapp-web.js"
 import qrcode from 'qrcode-terminal'
-import { WhatsAppMassageModel } from "../models/whatsApp.model.js";
 import { RealEstateModel } from "../models/realEstate.model.js";
+import { regions } from "./constants.js";
 
 const { Client, LocalAuth } = pkg
 const remotePath = `https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2407.3.html`
@@ -9,8 +9,18 @@ const allSessionsObject: any = {};
 
 const sendMessage = async (msg: pkg.Message) => {
 
-    const realEstates = await RealEstateModel.findOne({ city: msg.body })
-    console.log(realEstates)
+    const splitMessage = msg.body.split(' ')
+
+    const region = regions.find((region) => {
+        return splitMessage.includes(region)
+    })
+    let filter = {}
+
+    if (region) {
+        filter = { region: { $regex: region } }
+    }
+
+    const realEstates = await RealEstateModel.findOne(filter)
     // const response = await manager.process('ar', msg.body);
     // console.log(response)
     // const answer = response.intent
