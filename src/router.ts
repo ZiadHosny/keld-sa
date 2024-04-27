@@ -7,6 +7,7 @@ import { globalErrorMiddleware } from "./middleware/globalError.js"
 import { getFromEnv } from "./utils/getFromEnv.js"
 import { realEstateRouter } from "./modules/realEstate/realEstate.router.js"
 import { whatsAppRouter } from "./modules/whatsApp/whatsApp.router.js"
+import { nlpRouter } from "./modules/nlp/nlp.router.js"
 
 const { mode } = getFromEnv()
 const app = express()
@@ -25,6 +26,7 @@ if (mode == "dev") {
 app.use('/api', baseRouter)
 app.use('/api/realEstate', realEstateRouter)
 app.use('/api/whatsApp', whatsAppRouter)
+app.use('/api/nlp', nlpRouter)
 
 app.use('/', (req, res) => {
     res.redirect('/api');

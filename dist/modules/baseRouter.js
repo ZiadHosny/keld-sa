@@ -1,4 +1,4 @@
-import * as express from "express";
+import express from "express";
 import { APP_NAME } from "../utils/constants.js";
 const baseRouter = express.Router();
 baseRouter.get('/', (_, res) => {

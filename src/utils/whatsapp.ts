@@ -1,10 +1,42 @@
 import pkg from "whatsapp-web.js"
 import qrcode from 'qrcode-terminal'
 import { WhatsAppMassageModel } from "../models/whatsApp.model.js";
+import { RealEstateModel } from "../models/realEstate.model.js";
 
 const { Client, LocalAuth } = pkg
 const remotePath = `https://raw.githubusercontent.com/wppconnect-team/wa-version/main/html/2.2407.3.html`
 const allSessionsObject: any = {};
+
+const sendMessage = async (msg: pkg.Message) => {
+    const realEstates = await RealEstateModel.findOne({ city: msg.body })
+    console.log(realEstates)
+    // const response = await manager.process('ar', msg.body);
+    // console.log(response)
+    // const answer = response.intent
+    if (realEstates) {
+        await msg.reply(
+            `${realEstates.region}
+            ${realEstates.city} مدينة
+            ${realEstates.district} حي
+            ${realEstates.dateOfBirth} تاريخ الصفقة ميلادي
+            ${realEstates.dateOfHegira} تاريخ الصفقة هجري
+            ${realEstates.numberOfProperties} عدد العقارات
+            ${realEstates.propertyClassification} تصنيف العقار
+            ${realEstates.price} سعر العقار
+            ${realEstates.area} مساحة العقار
+        `)
+    }
+    await msg.reply('Hello From Ziad')
+
+
+    // await WhatsAppMassageModel.create({
+    //     deviceType: msg.deviceType,
+    //     replay: 'answer',
+    //     message: msg.body,
+    //     sender: msg.from,
+    //     receiver: msg.to
+    // })
+}
 
 export const connectToWhatsApp = async (id: string, socket: any) => {
 
@@ -18,6 +50,14 @@ export const connectToWhatsApp = async (id: string, socket: any) => {
         }
     })
 
+    client.on("authenticated", () => {
+        console.log("AUTHENTICATED");
+    });
+
+    client.on('disconnected', () => {
+        console.log("whatsapp disconnected");
+    });
+
     client.on("qr", (qr) => {
         console.log(qr)
         qrcode.generate(qr, { small: true })
@@ -25,10 +65,6 @@ export const connectToWhatsApp = async (id: string, socket: any) => {
             qr,
         });
     })
-
-    client.on("authenticated", () => {
-        console.log("AUTHENTICATED");
-    });
 
     client.on("ready", () => {
         console.log("Client is ready!")
@@ -45,19 +81,7 @@ export const connectToWhatsApp = async (id: string, socket: any) => {
 
     client.on("message", async (msg) => {
         try {
-
-            // const response = await manager.process('ar', msg.body);
-            // console.log(response)
-            // const answer = response.intent
-            await msg.reply('Hello From Ziad')
-
-            // await WhatsAppMassageModel.create({
-            //     deviceType: msg.deviceType,
-            //     replay: 'answer',
-            //     message: msg.body,
-            //     sender: msg.from,
-            //     receiver: msg.to
-            // })
+            await sendMessage(msg)
         } catch (error) {
             console.error(error)
         }
@@ -79,6 +103,14 @@ export const getWhatsappSession = async (id: string, socket: any) => {
         }
     })
 
+    client.on("authenticated", () => {
+        console.log("AUTHENTICATED");
+    });
+
+    client.on('disconnected', () => {
+        console.log("whatsapp disconnected");
+    });
+
     client.on("ready", () => {
         console.log("client is ready");
         socket.emit("ready", {
@@ -93,6 +125,14 @@ export const getWhatsappSession = async (id: string, socket: any) => {
             message: "your got logged out and here is QR code",
         });
     });
+
+    client.on("message", async (msg) => {
+        try {
+            await sendMessage(msg)
+        } catch (error) {
+            console.error(error)
+        }
+    })
 
     client.initialize().catch(err => console.log(err))
 }

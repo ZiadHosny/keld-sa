@@ -1,4 +1,4 @@
-import * as express from "express";
+import express from "express";
 import { AppError } from "../utils/AppError.js";
 
 const invalidRouter = express.Router()

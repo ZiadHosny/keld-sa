@@ -1,4 +1,4 @@
-import * as express from "express";
+import express from "express";
 import { addRealEstateFromExcelFile, getRealEstates } from "./realEstate.controller.js";
 const router = express.Router();
 router.get('/excel', addRealEstateFromExcelFile);
