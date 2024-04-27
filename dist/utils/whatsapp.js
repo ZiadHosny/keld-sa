@@ -12,14 +12,14 @@ const sendMessage = async (msg) => {
     // const answer = response.intent
     if (realEstates) {
         await msg.reply(`${realEstates.region}
-            ${realEstates.city} مدينة
-            ${realEstates.district} حي
-            ${realEstates.dateOfBirth} تاريخ الصفقة ميلادي
-            ${realEstates.dateOfHegira} تاريخ الصفقة هجري
-            ${realEstates.numberOfProperties} عدد العقارات
-            ${realEstates.propertyClassification} تصنيف العقار
-            ${realEstates.price} سعر العقار
-            ${realEstates.area} مساحة العقار
+            مدينة : ${realEstates.city}
+            حي : ${realEstates.district} 
+            تاريخ الصفقة ميلادي : ${realEstates.dateOfBirth}
+            تاريخ الصفقة هجري : ${realEstates.dateOfHegira}
+            عدد العقارات : ${realEstates.numberOfProperties}
+            تصنيف العقار : ${realEstates.propertyClassification}
+            سعر العقار : ${realEstates.price}
+            مساحة العقار : ${realEstates.area}
         `);
     }
     await msg.reply('Hello From Ziad');
@@ -44,8 +44,9 @@ export const connectToWhatsApp = async (id, socket) => {
     client.on("authenticated", () => {
         console.log("AUTHENTICATED");
     });
-    client.on('disconnected', () => {
-        console.log("whatsapp disconnected");
+    client.on('disconnected', (reason) => {
+        console.log("whatsapp disconnected", reason);
+        client.initialize().catch(err => console.log(err));
     });
     client.on("qr", (qr) => {
         console.log(qr);
@@ -78,7 +79,7 @@ export const connectToWhatsApp = async (id, socket) => {
 export const getWhatsappSession = async (id, socket) => {
     const client = new Client({
         authStrategy: new LocalAuth({
-            clientId: id
+            clientId: id,
         }),
         webVersionCache: {
             type: 'remote',

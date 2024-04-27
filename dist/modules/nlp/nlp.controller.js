@@ -28,6 +28,7 @@ export const connectToNlp = catchAsyncError(async (req, res) => {
 export const tryWords = catchAsyncError(async (req, res) => {
     const message = req.body.message;
     const manager = new NlpManager();
+    // const city = message.
     const realEstates = await RealEstateModel.findOne({ city: message });
     console.log(realEstates);
     if (fs.existsSync('./model.nlp')) {

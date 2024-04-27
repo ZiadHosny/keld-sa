@@ -8,6 +8,7 @@ const remotePath = `https://raw.githubusercontent.com/wppconnect-team/wa-version
 const allSessionsObject: any = {};
 
 const sendMessage = async (msg: pkg.Message) => {
+
     const realEstates = await RealEstateModel.findOne({ city: msg.body })
     console.log(realEstates)
     // const response = await manager.process('ar', msg.body);
@@ -16,14 +17,14 @@ const sendMessage = async (msg: pkg.Message) => {
     if (realEstates) {
         await msg.reply(
             `${realEstates.region}
-            ${realEstates.city} مدينة
-            ${realEstates.district} حي
-            ${realEstates.dateOfBirth} تاريخ الصفقة ميلادي
-            ${realEstates.dateOfHegira} تاريخ الصفقة هجري
-            ${realEstates.numberOfProperties} عدد العقارات
-            ${realEstates.propertyClassification} تصنيف العقار
-            ${realEstates.price} سعر العقار
-            ${realEstates.area} مساحة العقار
+            مدينة : ${realEstates.city}
+            حي : ${realEstates.district} 
+            تاريخ الصفقة ميلادي : ${realEstates.dateOfBirth}
+            تاريخ الصفقة هجري : ${realEstates.dateOfHegira}
+            عدد العقارات : ${realEstates.numberOfProperties}
+            تصنيف العقار : ${realEstates.propertyClassification}
+            سعر العقار : ${realEstates.price}
+            مساحة العقار : ${realEstates.area}
         `)
     }
     await msg.reply('Hello From Ziad')
@@ -54,8 +55,9 @@ export const connectToWhatsApp = async (id: string, socket: any) => {
         console.log("AUTHENTICATED");
     });
 
-    client.on('disconnected', () => {
-        console.log("whatsapp disconnected");
+    client.on('disconnected', (reason) => {
+        console.log("whatsapp disconnected", reason);
+        client.initialize().catch(err => console.log(err))
     });
 
     client.on("qr", (qr) => {
@@ -95,7 +97,7 @@ export const getWhatsappSession = async (id: string, socket: any) => {
 
     const client = new Client({
         authStrategy: new LocalAuth({
-            clientId: id
+            clientId: id,
         }),
         webVersionCache: {
             type: 'remote',
